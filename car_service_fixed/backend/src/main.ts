@@ -3,9 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+let app;
+
 async function bootstrap() {
     const logger = new Logger('Bootstrap');
-    const app = await NestFactory.create(AppModule);
+    app = await NestFactory.create(AppModule);
 
     // ── Global prefix ──────────────────────────────────────────────
     app.setGlobalPrefix('api/v1');
@@ -60,12 +62,15 @@ async function bootstrap() {
         swaggerOptions: { persistAuthorization: true },
     });
 
-    const port = parseInt(process.env.PORT || '3000');
-    await app.listen(port);
+    await app.init();
 
-    logger.log(`🚀 API running at http://localhost:${port}/api/v1`);
-    logger.log(`📖 Swagger docs at http://localhost:${port}/api/docs`);
-    logger.log(`✅ Allowed Origins: ${allowedOrigins.join(', ')}`);
+    logger.log(`🚀 API ready for serverless`);
 }
 
-bootstrap();
+export default async (req, res) => {
+    if (!app) {
+        await bootstrap();
+    }
+    const instance = app.getHttpAdapter().getInstance();
+    instance(req, res);
+};
