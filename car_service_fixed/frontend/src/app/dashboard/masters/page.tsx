@@ -3,6 +3,7 @@
 import { Users, Wrench, Phone } from 'lucide-react';
 import {useMasters} from "../../../hooks/useApi";
 import {User} from "../../../types";
+export const dynamic = 'force-dynamic';
 
 
 const COLORS = [

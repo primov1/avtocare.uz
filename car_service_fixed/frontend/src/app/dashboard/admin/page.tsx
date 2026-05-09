@@ -8,6 +8,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { TabBar } from '@/components/layout/TabBar';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
+export const dynamic = 'force-dynamic';
 import {
   LayoutDashboard,
   Users,

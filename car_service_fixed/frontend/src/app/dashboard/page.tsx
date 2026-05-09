@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+export const dynamic = 'force-dynamic';
+
 import { Wrench } from 'lucide-react';
 import { useAuth } from "../../lib/auth";
 

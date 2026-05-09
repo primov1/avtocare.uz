@@ -5,7 +5,7 @@ import { FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import {ServiceHistory, Vehicle} from "../../../types";
 import {useAuth} from "../../../lib/auth";
 import {useMyVehicles, useVehicleHistory} from "../../../hooks/useApi";
-
+export const dynamic = 'force-dynamic';
 
 // Demo history shown before backend is connected
 const DEMO: ServiceHistory[] = [

@@ -3,7 +3,7 @@
 import { AppointmentStatus } from "../../../types";
 import { useAppointments, useUpdateAppointmentStatus } from "../../../hooks/useApi";
 import { AppointmentsTable } from "../../../components/dashboard/AppointmentsTable";
-
+export const dynamic = 'force-dynamic';
 // Buni qo'shish kerak yoki types'dan import qilish kerak
 interface Apt {
     id: string;
