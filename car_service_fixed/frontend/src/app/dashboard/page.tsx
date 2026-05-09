@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Wrench } from 'lucide-react';
 import { useAuth } from "../../lib/auth";
-import { cn } from "../../lib/utils";
 
-// 1. Apt interfeysini e'lon qilamiz (Xatoni yo'qotish uchun asosiy qadam)
+// 1. Appointment statuslari uchun turni shu yerning o'zida e'lon qilamiz
+type AppointmentStatus = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+
 interface Apt {
     id: string;
     date: string;
@@ -36,17 +37,11 @@ function mapApt(a: Apt) {
         plateNumber:    a.vehicle?.plateNumber || '—',
         service:        a.problemDescription  || 'Umumiy ta\'mirlash',
         date:           a.date ? new Date(a.date).toLocaleString('uz-UZ', { dateStyle: 'short', timeStyle: 'short' }) : '—',
+        // "as AppointmentStatus" xatolikni oldini oladi
         status:         a.status as AppointmentStatus,
         master:         a.master?.fullName    || '—',
     };
 }
-
-// Backend ulanmaganda ko'rinadigan demo ma'lumotlar
-const DEMO_APPOINTMENTS = [
-    { id:'1', clientName:'Jasur Toshmatov',  clientInitials:'JT', clientPhone:'+998 90 123 45 67', carName:'Toyota Cobalt',    plateNumber:'01A 123 BC', service:'Moy almashtirish',     date:'Bugun, 10:00',  status:'in_progress' as AppointmentStatus, master:'A. Karimov'  },
-    { id:'2', clientName:'Malika Yusupova',  clientInitials:'MY', clientPhone:'+998 91 234 56 78', carName:'Chevrolet Malibu', plateNumber:'10B 456 DE', service:'Tormoz tizimi',        date:'Bugun, 11:30',  status:'confirmed'   as AppointmentStatus, master:'B. Rahimov'  },
-    { id:'3', clientName:'Bobur Aliyev',     clientInitials:'BA', clientPhone:'+998 93 345 67 89', carName:'Nexia 3',          plateNumber:'30C 789 FG', service:'Dvigatel diagnostika', date:'Bugun, 14:00',  status:'pending'     as AppointmentStatus, master:'—'          },
-];
 
 export default function DashboardPage() {
     const { user, loading } = useAuth();
@@ -54,7 +49,6 @@ export default function DashboardPage() {
 
     useEffect(() => {
         if (!loading && user) {
-            // Redirect to role-specific dashboard
             switch (user.role) {
                 case 'SUPER_ADMIN':
                     router.push('/dashboard/admin');
@@ -72,7 +66,6 @@ export default function DashboardPage() {
                     router.push('/dashboard/shop');
                     break;
                 default:
-                    // Stay on main dashboard if role not recognized
                     break;
             }
         }
